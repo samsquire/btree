@@ -217,16 +217,16 @@ class BTree():
         else:
             return None, -1
     
-    def search(self, greater_than_equal, less_than):
-        
+    def search(self, greater_than_equal, less_than, comparisons=0):
+         
             
         for child in self.children:
-            if child.key >= greater_than_equal and child.key < less_than:
-                if child.leaf:
-                    yield child
-                    yield from child.search(greater_than_equal, less_than)
-                else:
-                    yield from child.search(greater_than_equal, less_than)
+            if child.leaf:
+                if child.key >= greater_than_equal and child.key <= less_than:
+                    yield comparisons + 1, child
+                    yield from child.search(greater_than_equal, less_than, comparisons + 1)
+            else:
+                yield from child.search(greater_than_equal, less_than, comparisons + 1)
     
     def delete(self, key):
         deletion_point, index = self.find_location_for_key(key)
@@ -238,7 +238,3 @@ class BTree():
                 return deletion_point.delete(key)
         else:
             return False
-        
-
-    
-

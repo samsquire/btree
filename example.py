@@ -48,3 +48,8 @@ for item in root.walk():
     print(item.key, item.value)
 
 assert sorted(list(keysonly(root.walk()))) == list(keysonly(root.walk()))
+
+print("search test")
+for item in root.search(25, 30):
+    comparisons, child = item
+    print(comparisons, child.key)
