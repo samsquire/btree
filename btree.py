@@ -93,8 +93,8 @@ class BTree():
                         
                         new_root.children.append(new_right)
                         
-                        new_root.key = new_left.key
-                        new_root.value = new_left.value
+                        new_root.key = new_right.key
+                        new_root.value = new_right.value
                         
 
                     else:
@@ -221,12 +221,13 @@ class BTree():
          
             
         for child in self.children:
-            if child.leaf:
-                if child.key >= greater_than_equal and child.key <= less_than:
-                    yield comparisons + 1, child
+            if child.key <= less_than:
+                if child.leaf:
+                    if child.key >= greater_than_equal: 
+                        yield comparisons + 1, child
+                        yield from child.search(greater_than_equal, less_than, comparisons + 1)
+                else:
                     yield from child.search(greater_than_equal, less_than, comparisons + 1)
-            else:
-                yield from child.search(greater_than_equal, less_than, comparisons + 1)
     
     def delete(self, key):
         deletion_point, index = self.find_location_for_key(key)
