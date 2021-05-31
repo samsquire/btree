@@ -23,14 +23,20 @@ class BTree():
 
     def __str__(self):
         return "{}:{}".format(self.key, self.value)
-        
-    def insert(self, key, value, height=1, parent=None):
-        next_children = self.children
+
+    def find_exact(self, key):
+        leaf, last_child, parents = self.find(key)
+        if leaf.key == key:
+            return leaf
+        return None
+
+    def find(self, key):
         leaf = self
-        found = False
-        parents = [self]
-        child = None
+        next_children = self.children
         last_child = self
+        child = None
+        parents = [self]
+        found = False
         while found == False:
             next_children_changed = False
             for child in reversed(next_children):
@@ -49,8 +55,14 @@ class BTree():
                         
             if not next_children_changed:
                 found = True
+
+        return leaf, last_child, parents
                 
         
+        
+    def insert(self, key, value, height=1, parent=None):
+        
+        leaf, last_child, parents = self.find(key) 
         leaf = last_child
         
         print("Trying to insert {} at Found insertion leaf {}".format(key, leaf))

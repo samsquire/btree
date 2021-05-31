@@ -53,3 +53,5 @@ print("search test")
 for item in root.search(25, 30):
     comparisons, child = item
     print(comparisons, child.key)
+
+print(root.find_exact(30))
