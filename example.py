@@ -31,7 +31,7 @@ assert sorted(list(keysonly(root.walk()))) == list(keysonly(root.walk()))
 assert sorted(list(keysonly(root.walk()))) == sorted(inserted)
 
 root = BTree(False, 3, 0, None)
-
+inserted = []
 
 seen = {}
 
@@ -39,7 +39,7 @@ for i in range(1, 100):
     num1 = random.randint(0, 100)
     if num1 not in seen:
         seen[num1] = True
-    
+        inserted.append(num1) 
         root = root.insert(num1, str(num1))
 
 
@@ -50,6 +50,7 @@ for item in root.walk():
     print(item.key, item.value)
 
 assert sorted(list(keysonly(root.walk()))) == list(keysonly(root.walk()))
+assert sorted(list(keysonly(root.walk()))) == sorted(inserted)
 
 print("search test")
 for item in root.search(25, 30):

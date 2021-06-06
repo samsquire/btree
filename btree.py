@@ -58,6 +58,43 @@ class BTree():
 
         return leaf, last_child, parents
                 
+    def handle_split(self, original_parent, current): 
+        new_left, new_right, separation_value = current.split()
+        new_root = None                  
+
+        if original_parent == None:
+            
+            new_root = BTree(False, self.M, 0, None)
+            
+            parent = new_root
+            
+
+            new_root.children.append(new_left)
+            
+            new_root.children.append(new_right)
+            
+            new_root.key = new_right.key
+            new_root.value = new_right.value
+            
+
+        else:
+            
+            parent = original_parent
+            print("Embedded split {}".format(current.key)) 
+            original_parent.children.remove(current)
+            original_parent.children.append(new_left)
+            
+            original_parent.children.append(new_right)
+            original_parent.sort()
+       
+            
+    
+
+        new_left.parent = parent
+        new_right.parent = parent
+        
+        assert new_right.key > new_left.key
+        return new_root
         
         
     def insert(self, key, value, height=1, parent=None):
@@ -81,59 +118,17 @@ class BTree():
             inserted = False
             new_root = None
             
-            
+            bottom_is_too_big = len(current.children) >= current.M
+            if bottom_is_too_big: 
+                new_root = self.handle_split(current.parent, current)
+
+            current = current.parent 
+
+            # split nodes above
             while current != None:
-                
-                
                 original_parent = current.parent
-                bottom_is_too_big = current == bottom and len(current.children) >= current.M
-                if bottom_is_too_big or len(current.children) > current.M:
-                    
-
-
-                    
-                    new_left, new_right, separation_value = current.split()
-                                      
-
-                    if original_parent == None:
-                        
-                        new_root = BTree(False, self.M, 0, None)
-                        
-                        parent = new_root
-                        
-
-                        new_root.children.append(new_left)
-                        
-                        new_root.children.append(new_right)
-                        
-                        new_root.key = new_right.key
-                        new_root.value = new_right.value
-                        
-
-                    else:
-                        
-                        parent = original_parent
-                        print("Embedded split {}".format(current.key)) 
-                        original_parent.children.remove(current)
-                        original_parent.children.append(new_left)
-                        
-                        original_parent.children.append(new_right)
-                        original_parent.sort()
-                   
-                        
-                
-
-                    new_left.parent = parent
-                    new_right.parent = parent
-                    
-                    assert new_right.key > new_left.key
-                        
-                    
-
-                
-
-
-
+                if len(current.children) > current.M:
+                    new_root = self.handle_split(original_parent, current)  
                 
                 current = original_parent
 
