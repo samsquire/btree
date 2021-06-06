@@ -41,7 +41,7 @@ class BTree():
             next_children_changed = False
             for child in reversed(next_children):
                 if key >= child.key:
-                    print("Inspecting {} <= {} ".format(child.key, key))
+                    # print("Inspecting {} <= {} ".format(child.key, key))
                     next_children = child.children
                     
                     last_child = leaf
@@ -65,7 +65,7 @@ class BTree():
         leaf, last_child, parents = self.find(key) 
         leaf = last_child
         
-        print("Trying to insert {} at Found insertion leaf {}".format(key, leaf))
+        # print("Trying to insert {} at Found insertion leaf {}".format(key, leaf))
         # walk(leaf)
         
         
@@ -76,7 +76,7 @@ class BTree():
         else:
             # we need to split
             current = leaf
-            
+            bottom = leaf
 
             inserted = False
             new_root = None
@@ -86,7 +86,8 @@ class BTree():
                 
                 
                 original_parent = current.parent
-                if len(current.children) >= current.M:
+                bottom_is_too_big = current == bottom and len(current.children) >= current.M
+                if bottom_is_too_big or len(current.children) > current.M:
                     
 
 
@@ -112,7 +113,7 @@ class BTree():
                     else:
                         
                         parent = original_parent
-                      
+                        print("Embedded split {}".format(current.key)) 
                         original_parent.children.remove(current)
                         original_parent.children.append(new_left)
                         

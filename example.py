@@ -13,9 +13,10 @@ root = BTree(False, 3, 0, None)\
 .insert(2, "2")\
 .insert(3, "3")\
 .insert(4, "4")
-
+inserted = [1,2,3,4]
 for i in range(5, 100):
     root = root.insert(i, str(i))
+    inserted.append(i)
 
 
 walk(root)
@@ -27,6 +28,7 @@ def keysonly(items):
         yield item.key
 
 assert sorted(list(keysonly(root.walk()))) == list(keysonly(root.walk()))
+assert sorted(list(keysonly(root.walk()))) == sorted(inserted)
 
 root = BTree(False, 3, 0, None)
 
